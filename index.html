@@ -175,9 +175,238 @@
         <h1 id="Using-C-Language-to-Achieve-Ping-Fuction"><a href="#Using-C-Language-to-Achieve-Ping-Fuction" class="headerlink" title="Using C# Language to Achieve Ping Fuction"></a>Using C# Language to Achieve Ping Fuction</h1><hr>
 <h2 id="第一步设计窗体"><a href="#第一步设计窗体" class="headerlink" title="第一步设计窗体"></a>第一步设计窗体</h2><p>首先确定要使用的工具箱中的控件（button,listBox,textBox,label）,其次修改某些控件的内容（button,label）,完成后如图所示：<br><img src="/images/ping.png" alt></p>
 <hr>
-<h2 id="第二步进入form1程序代码"><a href="#第二步进入form1程序代码" class="headerlink" title="第二步进入form1程序代码"></a>第二步进入form1程序代码</h2><p>首先右击form1,查看代码，进入<strong>form1</strong>代码区，此时就需要我们完成<strong>主要功能</strong>的实现了。</p>
-<h3 id="Form1-CS中代码"><a href="#Form1-CS中代码" class="headerlink" title="Form1.CS中代码"></a>Form1.CS中代码</h3><p>1.注意开始的时候应该添加三行代码：<br>using System.Net;<br>using System.Net.Sockets;<br>using System.IO;</p>
-<p>2.返回设计界面，双击Ping按钮后出现Ping的单击事件处理函数,如图所示：<br>  <img src="/images/buttonping.png" alt></p>
+<h2 id="第二步编辑代码"><a href="#第二步编辑代码" class="headerlink" title="第二步编辑代码"></a>第二步编辑代码</h2><p>首先右击form1,查看代码，进入<strong>form1</strong>代码区，此时就需要我们完成<strong>主要功能</strong>的实现了。</p>
+<h3 id="编写代码的主要步骤："><a href="#编写代码的主要步骤：" class="headerlink" title="编写代码的主要步骤："></a>编写代码的主要步骤：</h3><p><strong>1.注意开始的时候应该添加三行代码</strong><br>using System.Net;<br>using System.Net.Sockets;<br>using System.IO;</p>
+<p><strong>2.返回设计界面，双击Ping按钮后出现Ping的单击事件处理函数,如图所示：</strong><br>  <img src="/images/buttonping.png" alt><br> 注意：这里的Button_Click函数不要用手一个个敲出来</p>
+<p>  <strong>button_Click中的函数如下：</strong></p>
+<blockquote>
+<pre><code>listBox1.Items.Clear();
+listBox2.Items.Clear();
+if (textBox1.Text == &quot;&quot;)
+{
+    MessageBox.Show(&quot;IP地址不能为空！&quot;);
+    return;
+}
+
+//将textBox1中的内容传给字符类型的Hostclient变量
+string Hostclient = textBox1.Text;
+
+//若textBox2中内容为空，则报错
+if (textBox2.Text == &quot;&quot;)
+{
+    MessageBox.Show(&quot;Ping的次数不能为空！&quot;);
+    return;
+}
+
+//从textBox2中获得Ping的次数
+int PingNum = int.Parse(textBox2.Text);
+
+*//定义分割IP地址的符号为，；*
+char[] tempchar = { &apos;,&apos;, &apos;;&apos; };
+string[] tmpstr = Hostclient.Split(tempchar);
+foreach (string str in tmpstr)
+{
+    int sc = 0;
+
+    //oneping函数将在下文实现，功能为ping一次
+    oneping(str, PingNum, ref sc);
+
+    //打印ping成功的次数
+    this.listBox2.Items.Add(&quot;ping&quot; + str + &quot;成功次数&quot; + sc.ToString());
+}</code></pre></blockquote>
+<p><strong>3.实现上文中的oneping函数</strong></p>
+<blockquote>
+<pre><code>private void oneping(string Hostclient, int pingNum, ref int sc)
+{
+
+    Socket Socket = new Socket(AddressFamily.InterNetwork, SocketType.Raw,
+    ProtocolType.Icmp);
+    Socket.ReceiveTimeout = 10;
+    IPHostEntry Hostinfo;
+    try
+    {
+        Hostinfo = Dns.GetHostEntry(Hostclient);
+    }
+    catch (Exception)
+    {
+        listBox1.Items.Add(&quot;无法辨识主机！&quot;);
+        return;
+    }
+    EndPoint Hostpoint = (EndPoint)new IPEndPoint(Hostinfo.AddressList[0], 0);
+    EndPoint Clientpoint = (EndPoint)new IPEndPoint(Hostinfo.AddressList[0], 0);
+    int DataSize = 4;
+    int PacketSize = DataSize + 8;
+    const int Icmp_echo = 8;
+    IcmPacket Packet = new IcmPacket(Icmp_echo, 0, 0, 45, 0, DataSize);
+    Byte[] Buffer = new Byte[PacketSize];
+    int index = Packet.CountByte(Buffer);
+    if (index != PacketSize)
+    {
+        listBox1.Items.Add(&quot;报文出现错误！&quot;);
+        return;
+    }
+    int Cksum_buffer_length = (int)Math.Ceiling(((Double)index) / 2);
+    UInt16[] Cksum_buffer = new UInt16[Cksum_buffer_length];
+    int Icmp_header_buffer_index = 0;
+
+    //将字节转化为UINT16类型
+    for (int I = 0; I &lt; Cksum_buffer_length; I++)
+    {
+        Cksum_buffer[I] = BitConverter.ToUInt16(Buffer, Icmp_header_buffer_index);
+        Icmp_header_buffer_index += 2;
+    }
+    Packet.CheckSum = IcmPacket.SumOfCheck(Cksum_buffer);
+    Byte[] SendData = new Byte[PacketSize];
+    index = Packet.CountByte(SendData);
+    if (index != PacketSize)
+    {
+        listBox1.Items.Add(&quot;报文出现错误！&quot;);
+        return;
+    }
+    for (int i = 0; i &lt; pingNum; i++)
+    {
+        int Nbytes = 0;
+        int startTime = Environment.TickCount;
+        try
+        {
+            Nbytes = Socket.SendTo(SendData, PacketSize, SocketFlags.None, Hostpoint);
+        }
+        catch (Exception)
+        {
+            listBox1.Items.Add(&quot;无法传送报文!&quot;);
+            return;
+        }
+        Byte[] ReceiveData = new Byte[256];
+        Nbytes = 0;
+        int Timeconsume = 100;
+        while (true)
+        {
+            try
+            {
+                Nbytes = Socket.ReceiveFrom(ReceiveData, 256, SocketFlags.None, ref Clientpoint);
+            }
+            catch (Exception)
+            {
+                listBox1.Items.Add(&quot;超时无响应!&quot;);
+                break;
+            }
+            if (Nbytes &gt; 0)
+            {
+                sc++;
+                Timeconsume = System.Environment.TickCount - startTime;
+                if (Timeconsume &lt; 1)
+                    listBox1.Items.Add(&quot;reply from: &quot;
+                        + Hostinfo.AddressList[0].ToString() + &quot; Send: &quot;
+                        + (PacketSize + 20).ToString() + &quot;time&lt;1ms &quot;
+                        + &quot;bytes Received &quot; + Nbytes.ToString());
+                else
+                    listBox1.Items.Add(&quot;reply from: &quot;
+                        + Hostinfo.AddressList[0].ToString() + &quot; Send: &quot;
+                        + (PacketSize + 20).ToString() + &quot; In &quot;
+                        + Timeconsume.ToString()
+                        + &quot; ms;bytes Received &quot; + Nbytes.ToString());
+                break;
+            }
+        }
+    }
+    Socket.Close();
+}</code></pre></blockquote>
+<p><strong>4.上文出现的IcmPacket报文类在此实现(此处的IcmPacket报文应放入Program.cs中)</strong></p>
+<blockquote>
+<pre><code>public class IcmPacket
+{
+    private Byte my_type;//ICMP类型
+    private Byte my_subCode;//ICMP代码
+    private UInt16 my_checkSum;//校验和
+    private UInt16 my_identifier;//标识符
+    private UInt16 my_sequenceNumber;//序列号
+    private Byte[] my_data;//ICMP数据
+
+    //初始化ICMP中的各项数据
+    public IcmPacket(Byte type, Byte subCode, UInt16 checkSum, UInt16 identifier,
+        UInt16 sequenceNumber, int dataSize)
+    {
+        my_type = type;
+        my_subCode = subCode;
+        my_checkSum = checkSum;
+        my_identifier = identifier;
+        my_sequenceNumber = sequenceNumber;
+        my_data = new byte[dataSize];
+        for (int i = 0; i &lt; dataSize; i++)
+            my_data[i] = (byte)&apos;k&apos;;
+    }
+    public UInt16 CheckSum
+    {
+        get
+        {
+            return my_checkSum;
+        }
+        set
+        {
+            my_checkSum = value;
+        }
+    }
+
+     //计算所需字节空间
+    public int CountByte(Byte[] buffer)
+    {
+        Byte[] b_type = new Byte[1] { my_type };
+        Byte[] b_code = new Byte[1] { my_subCode };
+        Byte[] b_cksum = BitConverter.GetBytes(my_checkSum);
+        Byte[] b_id = BitConverter.GetBytes(my_identifier);
+        Byte[] b_seq = BitConverter.GetBytes(my_sequenceNumber);
+        int i = 0;
+        Array.Copy(b_type, 0, buffer, i, b_type.Length);
+        i += b_type.Length;
+        Array.Copy(b_code, 0, buffer, i, b_code.Length);
+        i += b_code.Length;
+        Array.Copy(b_cksum, 0, buffer, i, b_cksum.Length);
+        i += b_cksum.Length;
+        Array.Copy(b_id, 0, buffer, i, b_id.Length);
+        i += b_id.Length;
+        Array.Copy(b_seq, 0, buffer, i, b_seq.Length);
+        i += b_seq.Length;
+        Array.Copy(my_data, 0, buffer, i, my_data.Length);
+        i += my_data.Length;
+        return i;
+    }
+
+    //计算校验和
+    public static UInt16 SumOfCheck(UInt16[] buffer)
+    {
+        int cksum = 0;
+        for (int i = 0; i &lt; buffer.Length; i++)
+            cksum += (int)buffer[i];
+        cksum = (cksum &gt;&gt; 16) + (cksum &amp; 0xffff); 
+        cksum += (cksum &gt;&gt; 16);
+        return (UInt16)(~cksum);
+    }
+}</code></pre></blockquote>
+<p><strong>5.回到窗体设计界面，双击save按钮，出现save按钮的单击事件处理函数</strong></p>
+<blockquote>
+<pre><code>private void button2_Click(object sender, EventArgs e)
+{
+    SaveFileDialog savedlg = new SaveFileDialog();
+    savedlg.Filter = &quot;文本文件|* .txt&quot;;
+    savedlg.Title = &quot;保存记录&quot;;
+    savedlg.ShowDialog();
+    if (savedlg.FileName != &quot;&quot;)
+    {
+        string localFilePath;
+        localFilePath = &quot;&quot;;
+        localFilePath = savedlg.FileName.ToString();
+        string str = &quot;&quot;;
+        for (int j = 0; j &lt; listBox1.Items.Count; j++)
+            str += listBox1.Items[j].ToString() + &quot;\r\n&quot;;
+        FileStream fs = new FileStream(localFilePath, FileMode.OpenOrCreate);
+        StreamWriter sw = new StreamWriter(fs);
+        sw.Write(str);
+        sw.Flush();
+        sw.Close();
+        fs.Close();
+        MessageBox.Show(&quot;PING结果保存完毕。&quot;, &quot;PING程序设计&quot;, MessageBoxButtons.OK);
+    }
+}</code></pre></blockquote>
 
       
 
