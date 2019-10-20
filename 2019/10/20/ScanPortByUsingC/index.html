@@ -13,7 +13,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
   <title>
     
-      我的第一篇博客文章 | Hexo
+      ScanPortByUsingC# | Hexo
     
   </title>
   <meta name="author" content="John Doe">
@@ -160,7 +160,7 @@
 	<!-- Page title -->
 	<p>
 		
-			Current post&nbsp;:&nbsp;《我的第一篇博客文章》
+			Current post&nbsp;:&nbsp;《ScanPortByUsingC#》
 		
 	</p>
 
@@ -277,8 +277,8 @@
 	<div class="article-title">
 		<i class="fa fa-paper-plane-o" aria-hidden="true"></i>
 		
-	<a href="/2019/10/13/我的第一篇博客文章/" itemprop="url">
-		我的第一篇博客文章
+	<a href="/2019/10/20/ScanPortByUsingC/" itemprop="url">
+		ScanPortByUsingC#
 	</a>
 
 	</div>
@@ -291,9 +291,9 @@
 
 	Posted on
 
-	<a href="/2019/10/13/我的第一篇博客文章/" itemprop="url">
-		<time datetime="2019-10-13T05:21:33.000Z" itemprop="datePublished">
-	  		2019-10-13
+	<a href="/2019/10/20/ScanPortByUsingC/" itemprop="url">
+		<time datetime="2019-10-20T10:31:13.000Z" itemprop="datePublished">
+	  		2019-10-20
 	  </time>
 	</a>
 	&nbsp;
@@ -309,9 +309,9 @@
 
 	Updated on
 
-	<a href="/2019/10/13/我的第一篇博客文章/" itemprop="url">
-		<time datetime="2019-10-13T05:21:33.000Z" itemprop="dateUpdated">
-	  		2019-10-14
+	<a href="/2019/10/20/ScanPortByUsingC/" itemprop="url">
+		<time datetime="2019-10-20T10:31:13.000Z" itemprop="dateUpdated">
+	  		2019-10-20
 	  </time>
 	</a> 
 
@@ -330,9 +330,17 @@
 	</div>
 
 	<div class="article-content" id="article-content">
-		<h2 id="使用hexo框架搭建我的博客"><a href="#使用hexo框架搭建我的博客" class="headerlink" title="使用hexo框架搭建我的博客"></a>使用hexo框架搭建我的博客</h2><p>  在搭建博客的过程中，首先我是观看了codesheep搭建博客的教学视频，也是由于他的视频激发了我搭建博客的欲望，在搭建博客的过程中我也遇到了一些问题，想要和大家分享。<br>  第一，由于我是Windows电脑，没有codesheep视频中的终端环境，因此需要git工具的帮助，幸而gitbash已经在电脑安装好了，这是我比较窃喜的地方。<br>  第二，在依照视频按步骤往下做的时候，windows电脑不需要换到超级用户模式，也不需要sudo提升权限，可以直接去掉。<br>  第三，当进行到最后一步的”hexo d”命令时，遇到了问题,在提示中gitbash界面里提醒需要识别你的身份，此时只需要依照它的提示敲击两个命令，git config –global user.name “”以及git config –global user.email “”，输入你的名字与邮箱就行。<br>  此次我搭建博客的过程就是如此，希望大家也能顺利的大家自己的博客，一起学习交流。  最后我观看的视频教程的地址会放到参考文献中供大家前往学习。</p>
-<h2 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h2><p><a href="https://www.bilibili.com/video/av44544186" target="_blank" rel="noopener">https://www.bilibili.com/video/av44544186</a></p>
-	
+		<hr>
+<p>title: ‘C#’<br>date: 2019-10-20 18:00:27<br>tags:</p>
+<hr>
+<h1 id="C-网络编程——端口扫描"><a href="#C-网络编程——端口扫描" class="headerlink" title="C#网络编程——端口扫描"></a>C#网络编程——端口扫描</h1><h2 id="一、设计窗体"><a href="#一、设计窗体" class="headerlink" title="一、设计窗体"></a>一、设计窗体</h2><h2 id><a href="#" class="headerlink" title></a><img src="/images/port.png" alt></h2><h2 id="二、编写代码"><a href="#二、编写代码" class="headerlink" title="二、编写代码"></a>二、编写代码</h2><h3 id="1-getInDate函数"><a href="#1-getInDate函数" class="headerlink" title="1.getInDate函数"></a>1.getInDate函数</h3><p><em>功能：从文本框中得到输入的数据</em><br> <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">private bool getInDate()</span><br><span class="line">&#123;</span><br><span class="line">    if (textHostname.Text.Length == 0)</span><br><span class="line">    &#123;</span><br><span class="line">        MessageBox.Show(&quot;请输入一个主机的名称！&quot;, &quot;系统提示&quot;);</span><br><span class="line">        textHostname.Focus();</span><br><span class="line">        return false;</span><br><span class="line">    &#125;</span><br><span class="line">    else</span><br><span class="line">    &#123;</span><br><span class="line">        try</span><br><span class="line">        &#123;</span><br><span class="line">            ipaddr = Dns.GetHostEntry(this.textHostname.Text).AddressList[0];</span><br><span class="line">            this.textHostname.Text = Dns.GetHostEntry(this.textHostname.Text).HostName;</span><br><span class="line">        &#125;</span><br><span class="line">        catch</span><br><span class="line">        &#123;</span><br><span class="line">            textHostname.Focus();</span><br><span class="line">            MessageBox.Show(&quot;请输入正确的主机地址，该地址DNS无法解析&quot;, &quot;系统提示&quot;);</span><br><span class="line">            return false;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    startPort = (Int32)sNum.Value;</span><br><span class="line">    endPort = (Int32)eNum.Value;</span><br><span class="line">    if (startPort &gt; endPort)</span><br><span class="line">    &#123;</span><br><span class="line">        MessageBox.Show(&quot;错误！起始端口必须要不大于结束端口！&quot;, &quot;系统提示&quot;);</span><br><span class="line">        startPort = endPort;</span><br><span class="line">        sNum.Text = startPort.ToString();</span><br><span class="line">        sNum.Focus();</span><br><span class="line">        return false;</span><br><span class="line">    &#125;</span><br><span class="line">    return true;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="2-顺序扫描"><a href="#2-顺序扫描" class="headerlink" title="2.顺序扫描"></a>2.顺序扫描</h3><p>功能：扫描端口一次</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">private void SScan(Object state)</span><br><span class="line">&#123;</span><br><span class="line">    Int32 port = (Int32)state;</span><br><span class="line"></span><br><span class="line">    Socket tcp = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);</span><br><span class="line">    try</span><br><span class="line">    &#123;</span><br><span class="line">        tcp.Connect(this.ipaddr, port);</span><br><span class="line"></span><br><span class="line">        string tMsg = port.ToString() + &quot;端口开放&quot;;</span><br><span class="line">        lstrt.Items.Add(tMsg);</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">    catch (Exception)</span><br><span class="line">    &#123;</span><br><span class="line">        lstrt.Items.Add(port.ToString() + &quot;端口关闭&quot;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>功能:单线程顺序扫描并输入端口扫描的时间</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">private void seqscan()</span><br><span class="line">&#123;</span><br><span class="line">    for (Int32 i = startPort; i &lt;= endPort; i++)</span><br><span class="line">    &#123;</span><br><span class="line">        int st = Environment.TickCount;</span><br><span class="line">        SScan(i);</span><br><span class="line">        int et = Environment.TickCount;</span><br><span class="line">        lstrt.Items.Add(&quot;端口&quot;+i+&quot;的扫描时间为&quot;+(et-st)+&quot;ms&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<pre><code></code></pre>	
 	</div>
 	
 	<div id="current-post-cover" data-scr="/img/cart_cover.jpg"></div>
@@ -350,12 +358,8 @@
 	<span>
 		<a href="javascript: window.scrollTo(0, 0);">To Top</a>
 		
-			<a href="/2019/10/14/Using-c-Language-to-Achieve-Ping-Fuction/" title="Using C# Language to Achieve Ping Fuction" rel="prev">
-				&laquo;Pre post
-			</a>
 		
-		
-			<a href="/2019/10/13/hello-world/" title="Hello World" rel="next">
+			<a href="/2019/10/14/Using-c-Language-to-Achieve-Ping-Fuction/" title="Using C# Language to Achieve Ping Fuction" rel="next">
 				Next post&raquo;
 			</a>
 			
@@ -376,32 +380,6 @@
 			
 					<li>
 						<div class="relate-post-text">
-							<a class="relate-post-title" href="/2019/10/20/ScanPortByUsingC/" title="ScanPortByUsingC#">
-								ScanPortByUsingC#			
-							</a>
-							<p class="relate-post-date">
-								<i class="fa fa-calendar"></i>
-								十月 20日, 2019				
-							</p>
-							<p class="relate-post-content">
-								
-title: ‘C#’date: 2019-10-20 18:00:27tags:
-
-C#网络编程——端口扫描一、设计窗体二、编写代码1.getInDate函数功能：从文本框中得到输入的数据 12345678910111213141...
-							</p>
-						</div>
-
-						<div class="relate-post-cover">
-							<a href="/2019/10/20/ScanPortByUsingC/" title="ScanPortByUsingC#">				
-								
-								<img class="lazy" src="/img/placeholder.jpg" data-src="/img/cart_cover.jpg" alt="ScanPortByUsingC#"/>
-							</a>
-						</div>
-					</li>											
-			
-			
-					<li>
-						<div class="relate-post-text">
 							<a class="relate-post-title" href="/2019/10/14/Using-c-Language-to-Achieve-Ping-Fuction/" title="Using C# Language to Achieve Ping Fuction">
 								Using C# Language to Achieve Ping Fuction			
 							</a>
@@ -419,6 +397,29 @@ C#网络编程——端口扫描一、设计窗体二、编写代码1.getInDate�
 							<a href="/2019/10/14/Using-c-Language-to-Achieve-Ping-Fuction/" title="Using C# Language to Achieve Ping Fuction">				
 								
 								<img class="lazy" src="/img/placeholder.jpg" data-src="/img/cart_cover.jpg" alt="Using C# Language to Achieve Ping Fuction"/>
+							</a>
+						</div>
+					</li>											
+			
+			
+					<li>
+						<div class="relate-post-text">
+							<a class="relate-post-title" href="/2019/10/13/我的第一篇博客文章/" title="我的第一篇博客文章">
+								我的第一篇博客文章			
+							</a>
+							<p class="relate-post-date">
+								<i class="fa fa-calendar"></i>
+								十月 13日, 2019				
+							</p>
+							<p class="relate-post-content">
+								使用hexo框架搭建我的博客  在搭建博客的过程中，首先我是观看了codesheep搭建博客的教学视频，也是由于他的视频激发了我搭建博客的欲望，在搭建博客的过程中我也遇到了一些问题，想要和大家分享。  第一，由于我是Windows电脑...
+							</p>
+						</div>
+
+						<div class="relate-post-cover">
+							<a href="/2019/10/13/我的第一篇博客文章/" title="我的第一篇博客文章">				
+								
+								<img class="lazy" src="/img/placeholder.jpg" data-src="/img/cart_cover.jpg" alt="我的第一篇博客文章"/>
 							</a>
 						</div>
 					</li>											
