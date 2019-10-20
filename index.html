@@ -152,95 +152,12 @@
           <div id="js-content" class="content-ll">
             
   
-    <article id="post-C#网络编程" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-初识C#网络编程" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="初识C-网络编程"><a href="#初识C-网络编程" class="headerlink" title="初识C#网络编程"></a><strong>初识C#网络编程</strong></h1><h2 id="一、System-Net的主要类"><a href="#一、System-Net的主要类" class="headerlink" title="一、System.Net的主要类"></a>一、System.Net的主要类</h2><pre><code>DNS                 提供简单的域名解析功能
-EndPoint            用于标识网络地址
-IpAddress           用于提供IP地址
-IPEndPoint          以IP和端口号的形式表示网络端点
-IPHostEntry         为Internet中主机的地址信息提供容器
-SocketAddress       代表一个套接字地址</code></pre><hr>
-<h2 id="二、牛刀小试（通信小程序）"><a href="#二、牛刀小试（通信小程序）" class="headerlink" title="二、牛刀小试（通信小程序）"></a>二、牛刀小试（通信小程序）</h2><h3 id="1-设计窗体"><a href="#1-设计窗体" class="headerlink" title="1.设计窗体"></a>1.设计窗体</h3><p><img src="/images/1.png" alt></p>
-<h3 id="2-代码"><a href="#2-代码" class="headerlink" title="2.代码"></a>2.代码</h3><blockquote>
-<pre><code>using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using System.Net.Sockets;
-using System.Net;
-using System.Threading;
-
-namespace Communication
-{
-    public partial class Form1 : Form
-    {
-        //创建套接字与线程
-        Socket socket;
-        Thread thread;
-        public Form1()
-        {
-            InitializeComponent();
-
-            //初始化套接字为无连接的UDP数据包套接字
-            socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
-
-            //以IP和端口号的形式表示网络端点，IP地址为0.0.0.0，端口号为8081
-            IPEndPoint myHost = new IPEndPoint(IPAddress.Any, 8080);
-
-            //将套接字绑定到本地
-            socket.Bind(myHost);
-
-            Control.CheckForIllegalCrossThreadCalls = false;
-            thread = new Thread(new ThreadStart(this.receivemessage));
-            thread.Start();
-
-        }
-
-        private void receivemessage()
-        {
-            while (true)
-            {
-                IPEndPoint remoteIPEnd = new IPEndPoint(IPAddress.Parse(&quot;127.0.0.1&quot;), 8080);
-
-                EndPoint remoteHost = remoteIPEnd;
-                byte[] dataBytes = new byte[1024];
-                int datalength = socket.ReceiveFrom(dataBytes, ref remoteHost);
-                string tempstr = System.Text.Encoding.Unicode.GetString(dataBytes, 0, datalength);
-
-                RM.AppendText(&quot;来自&quot; + remoteHost.ToString() + &quot;的消息：&quot; + tempstr);
-                RM.AppendText(Environment.NewLine);
-
-
-            }
-        }
-
-        private void SB_Click(object sender, EventArgs e)
-        {
-            IPEndPoint remoteIPEnd = new IPEndPoint(IPAddress.Parse(this.RIP.Text), 8081);
-            byte[] dataBytes = System.Text.Encoding.Unicode.GetBytes(this.SM.Text);
-            socket.SendTo(dataBytes, SocketFlags.None, remoteIPEnd);
-
-        }
-
-        private void Form1_FormClosed(object sender, FormClosedEventArgs e)
-        {
-            this.socket.Shutdown(SocketShutdown.Both);
-            this.socket.Close();
-            this.thread.Abort();
-
-        }
-    }
-}</code></pre></blockquote>
-<h3 id="3-运行情况"><a href="#3-运行情况" class="headerlink" title="3.运行情况"></a>3.运行情况</h3><p><img src="/images/res1.png" alt></p>
-
+        
       
 
       
@@ -252,7 +169,7 @@ namespace Communication
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2019/10/15/C#网络编程/">展开全文 >></a>
+          <a class="article-more-a" href="/2019/10/15/初识C#网络编程/">展开全文 >></a>
         </p>
       
 
